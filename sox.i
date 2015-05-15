@@ -292,6 +292,10 @@ extern sox_init;
      SOX_DEFAULT_PRECISION Default precision is 16 bits per sample.
      SOX_DEFAULT_ENCODING  Default encoding is SIGN2 (linear 2's complement
                            PCM).
+     SOX_SAMPLE_PRECISION  Bits in a SoX sample.
+     SOX_SAMPLE_MIN        Minimum value for a SoX sample.
+     SOX_SAMPLE_MAX        Maximum value for a SoX sample.
+
 
    SEE ALSO: sox_open_read, sox_open_write, sox_encodings. */
 
