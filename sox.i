@@ -29,22 +29,25 @@ extern sox_open_read;
 
      The handle can also be used as a structure to retrieve some informations:
 
-        s.filename  = name of file;
-        s.filetype  = type of file, as determined by header inspection or
-                      libmagic;
-        s.seekable  = can seek on this file;
-        s.offset    = current offset with respect to start of data;
-        s.clips     = incremented if clipping occurs;
-        s.errno     = error code;
-        s.errstr    = error message;
-        s.rate      = samples per second, 0 if unknown;
-        s.channels  = number of sound channels, 0 if unknown;
-        s.samples   = number of sound samples, 0 if unknown;
-        s.precision = bits per sample, 0 if unknown;
-        s.length    = samples*channels in file, 0 if unknown, -1 if
-                      unspecified;
-        s.duration  = duration in seconds;
-        s.encoding  = encoding (integer code);
+        s.bits_per_sample = number of bits per sample;
+        s.compression = compression factor (where applicable);
+        s.filename    = name of file;
+        s.filetype    = type of file, as determined by header inspection or
+                        libmagic;
+        s.seekable    = can seek on this file;
+        s.offset      = current offset with respect to start of data;
+        s.clips       = incremented if clipping occurs;
+        s.errno       = error code;
+        s.errstr      = error message;
+        s.rate        = samples per second, 0 if unknown;
+        s.channels    = number of sound channels, 0 if unknown;
+        s.samples     = number of sound samples, 0 if unknown;
+        s.precision   = bits per sample, 0 if unknown;
+        s.length      = samples*channels in file, 0 if unknown, -1 if
+                        unspecified;
+        s.mode        = read or write mode ('r' or 'w');
+        s.duration    = duration in seconds;
+        s.encoding    = encoding (integer code);
 
      For instance, the duration (in seconds) is given by:
 

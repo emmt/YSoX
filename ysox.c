@@ -212,9 +212,9 @@ ysox_eval(void* addr, int argc)
                                  "yet implemented");
         if (imin <= 0) imin += ntot;
         if (imax <= 0) imax += ntot;
-      if (imin > imax || imin <= 0 || imax > ntot) y_error("invalid range");
-      offset = imin - 1;
-      samples = imax - imin + 1;
+        if (imin > imax || imin <= 0 || imax > ntot) y_error("invalid range");
+        offset = imin - 1;
+        samples = imax - imin + 1;
       }
     } else {
       y_error("unexpected type of argument");
@@ -237,49 +237,106 @@ ysox_extract(void* addr, char* member)
 {
   ysox_t* obj = (ysox_t*)addr;
   sox_format_t* ft = obj->format;
-  int c = (member != NULL ? member[0] : '\0');
   if (ft == NULL) {
     y_error("sound stream has been closed");
   }
-  if (c == 'f' && strcmp(member, "filename") == 0) {
-    push_string(ft->filename);
-  } else if (c == 'f' && strcmp(member, "filetype") == 0) {
-    push_string(ft->filetype);
-  } else if (c == 'c' && strcmp(member, "clips") == 0) {
-    ypush_long(ft->clips);
-#if 0
-  } else if (c == 'l' && strcmp(member, "length") == 0) {
-    ypush_long(ft->olength);
-#endif
-  } else if (c == 'o' && strcmp(member, "offset") == 0) {
-    ypush_long(obj->offset);
-  } else if (c == 's' && strcmp(member, "seekable") == 0) {
-    ypush_int(ft->seekable ? TRUE : FALSE);
-  } else if (c == 'e' && strcmp(member, "encoding") == 0) {
-    ypush_int(ft->encoding.encoding);
-  } else if (c == 'e' && strcmp(member, "errno") == 0) {
-    ypush_int(ft->sox_errno);
-  } else if (c == 'e' && strcmp(member, "errstr") == 0) {
-    const size_t N = sizeof(ft->sox_errstr);
-    char tmp[N+1];
-    memcpy(tmp, ft->sox_errstr, N);
-    tmp[N] = '\0';
-    push_string(tmp);
-  } else if (c == 'r' && strcmp(member, "rate") == 0) {
-    ypush_double(ft->signal.rate);
-  } else if (c == 'c' && strcmp(member, "channels") == 0) {
-    ypush_long(ft->signal.channels);
-  } else if (c == 's' && strcmp(member, "samples") == 0) {
-    ypush_long(ft->signal.length/ft->signal.channels);
-  } else if (c == 'p' && strcmp(member, "precision") == 0) {
-    ypush_long(ft->signal.precision);
-  } else if (c == 'l' && strcmp(member, "length") == 0) {
-    ypush_long(ft->signal.length);
-  } else if (c == 'd' && strcmp(member, "duration") == 0) {
-    ypush_double(ft->signal.length/ft->signal.channels/ft->signal.rate);
-  } else {
-    y_error("bad member name");
+  switch (member != NULL ? member[0] : '\0') {
+  case 'b':
+    if (strcmp(member, "bits_per_sample") == 0) {
+      ypush_long(ft->encoding.bits_per_sample);
+      return;
+    }
+    break;
+  case 'c':
+    if (strcmp(member, "channels") == 0) {
+      ypush_long(ft->signal.channels);
+      return;
+    }
+    if (strcmp(member, "clips") == 0) {
+      ypush_long(ft->clips);
+      return;
+    }
+    if (strcmp(member, "compression") == 0) {
+      ypush_double(ft->encoding.compression);
+      return;
+    }
+    break;
+  case 'd':
+    if (strcmp(member, "duration") == 0) {
+      ypush_double(ft->signal.length/ft->signal.channels/ft->signal.rate);
+      return;
+    }
+    break;
+  case 'e':
+    if (strcmp(member, "encoding") == 0) {
+      ypush_int(ft->encoding.encoding);
+      return;
+    }
+    if (strcmp(member, "errno") == 0) {
+      ypush_int(ft->sox_errno);
+      return;
+    }
+    if (strcmp(member, "errstr") == 0) {
+      const size_t N = sizeof(ft->sox_errstr);
+      char tmp[N+1];
+      memcpy(tmp, ft->sox_errstr, N);
+      tmp[N] = '\0';
+      push_string(tmp);
+      return;
+    }
+    break;
+  case 'f':
+    if (strcmp(member, "filename") == 0) {
+      push_string(ft->filename);
+      return;
+    }
+    if (strcmp(member, "filetype") == 0) {
+      push_string(ft->filetype);
+      return;
+    }
+    break;
+  case 'l':
+     if (strcmp(member, "length") == 0) {
+       ypush_long(ft->signal.length);
+       return;
+     }
+     break;
+  case 'm':
+     if (strcmp(member, "mode") == 0) {
+       ypush_int(ft->mode);
+       return;
+     }
+     break;
+  case 'o':
+    if (strcmp(member, "offset") == 0) {
+      ypush_long(obj->offset);
+      return;
+    }
+    break;
+  case 'p':
+    if (strcmp(member, "precision") == 0) {
+      ypush_long(ft->signal.precision);
+      return;
+    }
+    break;
+  case 'r':
+    if (strcmp(member, "rate") == 0) {
+      ypush_double(ft->signal.rate);
+      return;
+    }
+    break;
+  case 's':
+    if (strcmp(member, "samples") == 0) {
+      ypush_long(ft->signal.length/ft->signal.channels);
+      return;
+    }
+    if (strcmp(member, "seekable") == 0) {
+      ypush_int(ft->seekable ? TRUE : FALSE);
+      return;
+    }
+    break;
   }
+  y_error("bad member name");
 }
 
 static ysox_t*
@@ -485,6 +542,7 @@ seek_to(ysox_t* obj, long offset)
   if (offset*channels < 0) y_error("integer overflow");
   if (offset*channels > length) offset = length/channels;
   if (obj->offset != offset) {
+    fprintf(stderr, "set offset to: %ld\n", offset);
     critical();
     if (sox_seek(obj->format, offset*channels, SOX_SEEK_SET) != SOX_SUCCESS) {
       y_errorq("sox_seek failed (%s)", obj->format->sox_errstr);
