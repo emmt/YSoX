@@ -17,13 +17,15 @@ extern sox_open_read;
      Open sound file PATH for reading and  return a handle for it.  The handle
      can be indexed to read some audio samples:
 
-        s(i)      yields i-th sample;
-        s(i1:i2)  yields samples in the range i1 to i2;
+        s(i)         yields i-th sample;
+        s(i1:i2)     yields samples in the range i1 to i2;
+        s() or s(:)  yield all remaining samples;
 
      the same indexing rules as in Yorick apply (i.e., indices less or equal 0
-     refer to the end of the stream).   Fewer samples, or even no data, may be
-     returned if the end of the  stream is encountered.  See sox_read for more
-     details.
+     refer to the end  of the stream).  If i1 or i2  are omitted, they default
+     to the  current stream position and  the end of the  stream respectively.
+     Fewer samples, or even no data, may  be returned if the end of the stream
+     is encountered.  See sox_read for more details.
 
      The handle can also be used as a structure to retrieve some informations:
 
@@ -194,31 +196,6 @@ extern sox_delete_comments;
              sox_append_comment.
  */
 
-/* DOCUMENT
-
-  SOX_UNSPEC                Members of sox_signalinfo_t are set to SOX_UNSPEC (= 0) if the actual value is not yet known.
-
-  SOX_UNKNOWN_LEN
-
-                            sox_signalinfo_t.length is set to SOX_UNKNOWN_LEN
-                            (= -1) within the effects chain if the actual
-                            length is not known. Format handlers currently use
-                            SOX_UNSPEC instead.
-
-  SOX_IGNORE_LENGTH
-
-                            sox_signalinfo_t.length is set to
-                            SOX_IGNORE_LENGTH (= -2) to indicate that a format
-                            handler should ignore length information in file
-                            headers.
-
-  SOX_DEFAULT_CHANNELS      Default channel count is 2 (stereo).
-  SOX_DEFAULT_RATE          Default rate is 48000Hz.
-  SOX_DEFAULT_PRECISION     Default precision is 16 bits per sample.
-  SOX_DEFAULT_ENCODING      Default encoding is SIGN2 (linear 2's complement
-                            PCM).
-
-*/
 
 extern sox_formats;
 
@@ -293,15 +270,29 @@ extern sox_fpemask;
      this in a functioning program.
  */
 
+local SOX_UNSPEC, SOX_UNKNOWN_LEN, SOX_IGNORE_LENGTH, SOX_DEFAULT_CHANNELS,
+  SOX_DEFAULT_RATE, SOX_DEFAULT_PRECISION, SOX_DEFAULT_ENCODING
 extern sox_init;
 /* DOCUMENT sox_init;
      Initialize  the SoX  library and  global variables.   This subroutine  is
      automatically called when the plugin is  loaded, but can be safely called
      again (e.g., to restore global variables).
 
-   SEE ALSO:
- */
+     Global constants include the various encodings (see `sox_encodings`) and:
 
+     SOX_UNSPEC            Unspecified value or actual value is not yet known.
+     SOX_UNKNOWN_LEN       Unknown length or actual length is not known.
+     SOX_IGNORE_LENGTH     Indicate that a format handler should ignore length
+                           information in file headers.
+     SOX_DEFAULT_CHANNELS  Default channel count is 2 (stereo).
+     SOX_DEFAULT_RATE      Default rate is 48000Hz.
+     SOX_DEFAULT_PRECISION Default precision is 16 bits per sample.
+     SOX_DEFAULT_ENCODING  Default encoding is SIGN2 (linear 2's complement
+                           PCM).
+
+   SEE ALSO: sox_open_read, sox_open_write, sox_encodings. */
+
+/* Initialize the internals. */
 sox_init;
 
 /*
