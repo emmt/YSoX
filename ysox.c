@@ -542,7 +542,6 @@ seek_to(ysox_t* obj, long offset)
   if (offset*channels < 0) y_error("integer overflow");
   if (offset*channels > length) offset = length/channels;
   if (obj->offset != offset) {
-    fprintf(stderr, "set offset to: %ld\n", offset);
     critical();
     if (sox_seek(obj->format, offset*channels, SOX_SEEK_SET) != SOX_SUCCESS) {
       y_errorq("sox_seek failed (%s)", obj->format->sox_errstr);
