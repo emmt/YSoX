@@ -324,6 +324,10 @@ ysox_extract(void* addr, char* member)
       ypush_double(ft->signal.rate);
       return;
     }
+    if (strcmp(member, "readable") == 0) {
+      ypush_int(ft != NULL && ft->mode == 'r');
+      return;
+    }
     break;
   case 's':
     if (strcmp(member, "samples") == 0) {
@@ -332,6 +336,12 @@ ysox_extract(void* addr, char* member)
     }
     if (strcmp(member, "seekable") == 0) {
       ypush_int(ft->seekable ? TRUE : FALSE);
+      return;
+    }
+    break;
+  case 'w':
+    if (strcmp(member, "writable") == 0) {
+      ypush_int(ft != NULL && ft->mode == 'w');
       return;
     }
     break;
