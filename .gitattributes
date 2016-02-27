@@ -1,6 +1,6 @@
 *.[hc]     filter=cleanup-code
 *.i        filter=cleanup-text
-README     filter=cleanup-text
+*.md       filter=cleanup-text
 TODO       filter=cleanup-text
 AUTHORS    filter=cleanup-text
 NEWS       filter=cleanup-text
