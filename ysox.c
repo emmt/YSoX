@@ -1220,15 +1220,3 @@ Y_sox_fpemask(int argc)
   if (argc != 1) y_error("expecting exactly one argument");
   switch_fpemask(ygets_i(0));
 }
-
-/*
- * Local Variables:
- * mode: C
- * c-basic-offset: 2
- * tab-width: 8
- * indent-tabs-mode: nil
- * fill-column: 79
- * coding: utf-8
- * ispell-local-dictionary: "american"
- * End:
- */
