@@ -1,7 +1,7 @@
 YSoX
 ====
 
-YSoX is a [Yorick](http://yorick.github.com/) plug-in for endocing/decoding
+YSoX is a [Yorick](http://github.com/LLNL/yorick/) plug-in for endocing/decoding
 audio thanks to the [SoX library](http://sox.sourceforge.net/).
 
 Installation
