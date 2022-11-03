@@ -83,7 +83,7 @@ License
 
 To temporarily suspend **SIGFPE** (floating-point error) signals, the
 `switch_fpemask()` function is based on `ygl_fpemask()` borrowed from
-[Yorick-GL](https://github.com/dhmunro/yorick-gl) plug-in written by Dave
+[Yorick-GL](https://github.com/LLNL/yorick-gl) plug-in written by Dave
 Munro.  For this piece of code, the following applies:
 
 > Copyright (c) 2012, David H. Munro.
